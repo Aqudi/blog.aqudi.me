@@ -1,37 +1,37 @@
 const lost = require('lost')
 const pxtorem = require('postcss-pxtorem')
 
-const url = 'https://lumen.netlify.com'
+const url = 'https://aqudi-blog.netlify.app/'
 
 module.exports = {
   siteMetadata: {
     url,
     siteUrl: url,
-    title: 'Blog by John Doe',
+    title: 'Aqudi 프로꿈래머',
     subtitle:
-      'Pellentesque odio nisi, euismod in, pharetra a, ultricies in, diam. Sed arcu.',
-    copyright: '© All rights reserved.',
-    disqusShortname: '',
+      'Aqudi의 개발 블로그',
+    copyright: '©2020 Aqudi. All rights reserved.',
+    disqusShortname: 'aqudi-blog',
     menu: [
       {
         label: 'Articles',
         path: '/',
       },
-      {
-        label: 'About me',
-        path: '/about/',
-      },
-      {
-        label: 'Contact me',
-        path: '/contact/',
-      },
+      // {
+      //   label: 'About me',
+      //   path: '/about/',
+      // },
+      // {
+      //   label: 'Contact me',
+      //   path: '/contact/',
+      // },
     ],
     author: {
-      name: 'John Doe',
-      email: '#',
+      name: 'Aqudi',
+      email: 'gjdigj145@gmail.com',
       telegram: '#',
       twitter: '#',
-      github: '#',
+      github: 'Aqudi',
       rss: '#',
       vk: '#',
     },
