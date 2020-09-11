@@ -5,8 +5,12 @@ import Layout from '../components/Layout'
 import Post from '../components/Post'
 import Sidebar from '../components/Sidebar'
 
+import moment from 'moment'
+import 'moment/locale/ko'
+
 class IndexRoute extends React.Component {
   render() {
+    moment.locale('ko')
     const items = []
     const { title, subtitle } = this.props.data.site.siteMetadata
     const posts = this.props.data.allMarkdownRemark.edges
@@ -31,7 +35,7 @@ class IndexRoute extends React.Component {
   }
 }
 
-export default IndexRoute
+export default IndexRoute 
 
 export const pageQuery = graphql`
   query IndexQuery {
@@ -73,6 +77,10 @@ export const pageQuery = graphql`
             description
           }
         }
+      }
+      group(field: frontmatter___category) {
+        fieldValue
+        totalCount
       }
     }
   }

@@ -1,6 +1,7 @@
 import React from 'react'
 import { Link } from 'gatsby'
 import moment from 'moment'
+
 import './style.scss'
 
 class Post extends React.Component {
@@ -18,9 +19,9 @@ class Post extends React.Component {
         <div className="post__meta">
           <time
             className="post__meta-time"
-            dateTime={moment(date).format('MMMM D, YYYY')}
+            dateTime={moment(date).format('YYYY MMMM D')}
           >
-            {moment(date).format('MMMM YYYY')}
+            {moment(date).format('YYYY년 MMMM D일')}
           </time>
           <span className="post__meta-divider" />
           <span className="post__meta-category" key={categorySlug}>
@@ -35,9 +36,9 @@ class Post extends React.Component {
           </Link>
         </h2>
         <p className="post__description">{description}</p>
-        <Link className="post__readmore" to={slug}>
+        {/* <Link className="post__readmore" to={slug}>
           Read
-        </Link>
+        </Link> */}
       </div>
     )
   }

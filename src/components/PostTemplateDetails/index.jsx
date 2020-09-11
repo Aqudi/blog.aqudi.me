@@ -48,16 +48,16 @@ class PostTemplateDetails extends React.Component {
         <div className="post-single">
           <div className="post-single__inner">
             <h1 className="post-single__title">{post.frontmatter.title}</h1>
+            <div className="post-single__date">
+              <em>
+                작성일 : {moment(post.frontmatter.date).format('YYYY년 MMM D일')}
+              </em>
+            </div>
             <div
               className="post-single__body"
               /* eslint-disable-next-line react/no-danger */
               dangerouslySetInnerHTML={{ __html: post.html }}
             />
-            <div className="post-single__date">
-              <em>
-                Published {moment(post.frontmatter.date).format('D MMM YYYY')}
-              </em>
-            </div>
           </div>
           <div className="post-single__footer">
             {tagsBlock}
