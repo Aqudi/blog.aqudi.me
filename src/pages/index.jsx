@@ -24,6 +24,7 @@ class IndexRoute extends React.Component {
           <Helmet>
             <title>{title}</title>
             <meta name="description" content={subtitle} />
+            <meta name="google-site-verification" content="F_0TdVgbenK_3PeIlVsu0hfQwDImk5hVTZ02r1XZyq8" />
           </Helmet>
           <Sidebar {...this.props} />
           <div className="content">
