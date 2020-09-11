@@ -71,6 +71,10 @@ export const pageQuery = graphql`
           }
         }
       }
+      categories: group(field: frontmatter___category) {
+        fieldValue
+        totalCount
+      }
     }
   }
 `

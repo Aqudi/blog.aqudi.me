@@ -15,7 +15,7 @@ class Sidebar extends React.Component {
       copyright,
       menu,
     } = this.props.data.site.siteMetadata
-    const categories = this.props.data.allMarkdownRemark.group
+    const categories = this.props.data.allMarkdownRemark.categories
     const isHomePage = get(location, 'pathname', '/') === '/'
 
     /* eslint-disable jsx-a11y/img-redundant-alt */

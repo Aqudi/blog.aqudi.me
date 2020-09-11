@@ -58,5 +58,14 @@ export const pageQuery = graphql`
         description
       }
     }
+    allMarkdownRemark(
+      limit: 2000
+      filter: { frontmatter: { layout: { eq: "post" }, draft: { ne: true } } }
+    ) {
+      categories: group(field: frontmatter___category) {
+        fieldValue
+        totalCount
+      }
+    }
   }
 `

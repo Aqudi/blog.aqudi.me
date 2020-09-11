@@ -79,7 +79,7 @@ export const pageQuery = graphql`
           }
         }
       }
-      group(field: frontmatter___category) {
+      categories: group(field: frontmatter___category) {
         fieldValue
         totalCount
       }
