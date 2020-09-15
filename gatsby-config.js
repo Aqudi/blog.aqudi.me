@@ -1,180 +1,105 @@
-const lost = require('lost')
-const pxtorem = require('postcss-pxtorem')
-
-const url = 'https://aqudi-blog.netlify.app/'
+const metaConfig = require('./gatsby-meta-config')
 
 module.exports = {
-  siteMetadata: {
-    url,
-    siteUrl: url,
-    title: 'Aqudi 프로꿈래머',
-    subtitle:
-      'Aqudi의 개발 블로그',
-    copyright: '©2020 Aqudi. All rights reserved.',
-    disqusShortname: 'aqudi-blog',
-    menu: [
-      {
-        label: 'Articles',
-        path: '/',
-      },
-      {
-        label: 'Categories',
-        path: '/categories/',
-      },
-      // {
-      //   label: 'About me',
-      //   path: '/about/',
-      // },
-      // {
-      //   label: 'Contact me',
-      //   path: '/contact/',
-      // },
-    ],
-    author: {
-      name: 'Aqudi',
-      email: 'gjdigj145@gmail.com',
-      telegram: '#',
-      twitter: '#',
-      github: 'Aqudi',
-      rss: '#',
-      vk: '#',
-    },
-  },
+  siteMetadata: metaConfig,
   plugins: [
     {
-      resolve: 'gatsby-source-filesystem',
+      resolve: `gatsby-source-filesystem`,
       options: {
-        path: `${__dirname}/src/pages`,
-        name: 'pages',
+        path: `${__dirname}/content/blog`,
+        name: `blog`,
       },
     },
     {
-      resolve: 'gatsby-plugin-feed',
+      resolve: `gatsby-source-filesystem`,
       options: {
-        query: `
-          {
-            site {
-              siteMetadata {
-                url
-                title
-                description: subtitle
-              }
-            }
-          }
-        `,
-        feeds: [
-          {
-            serialize: ({ query: { site, allMarkdownRemark } }) =>
-              allMarkdownRemark.edges.map(edge =>
-                Object.assign({}, edge.node.frontmatter, {
-                  description: edge.node.frontmatter.description,
-                  date: edge.node.frontmatter.date,
-                  url: site.siteMetadata.url + edge.node.fields.slug,
-                  guid: site.siteMetadata.url + edge.node.fields.slug,
-                  custom_elements: [{ 'content:encoded': edge.node.html }],
-                })
-              ),
-            query: `
-              {
-                allMarkdownRemark(
-                  limit: 1000,
-                  sort: { order: DESC, fields: [frontmatter___date] },
-                  filter: { frontmatter: { layout: { eq: "post" }, draft: { ne: true } } }
-                ) {
-                  edges {
-                    node {
-                      html
-                      fields {
-                        slug
-                      }
-                      frontmatter {
-                        title
-                        date
-                        layout
-                        draft
-                        description
-                      }
-                    }
-                  }
-                }
-              }
-            `,
-            output: '/rss.xml',
-          },
-        ],
+        path: `${__dirname}/content/__about`,
+        name: `about`,
       },
     },
     {
-      resolve: 'gatsby-transformer-remark',
+      resolve: `gatsby-source-filesystem`,
+      options: {
+        path: `${__dirname}/content/assets`,
+        name: `assets`,
+      },
+    },
+    {
+      resolve: `gatsby-transformer-remark`,
       options: {
         plugins: [
           {
-            resolve: 'gatsby-remark-images',
+            resolve: `gatsby-remark-katex`,
             options: {
-              maxWidth: 960,
+              strict: `ignore`,
             },
           },
           {
-            resolve: 'gatsby-remark-responsive-iframe',
-            options: { wrapperStyle: 'margin-bottom: 1.0725rem' },
+            resolve: `gatsby-remark-images`,
+            options: {
+              maxWidth: 1200,
+              linkImagesToOriginal: false,
+            },
           },
-          'gatsby-remark-prismjs',
-          'gatsby-remark-copy-linked-files',
-          'gatsby-remark-smartypants',
+          {
+            resolve: `gatsby-remark-images-medium-zoom`,
+            options: {
+              margin: 36,
+              scrollOffset: 0,
+            },
+          },
+          {
+            resolve: `gatsby-remark-responsive-iframe`,
+            options: {
+              wrapperStyle: `margin-bottom: 1.0725rem`,
+            },
+          },
+          {
+            resolve: `gatsby-remark-prismjs`,
+            options: {
+              inlineCodeMarker: '%',
+            },
+          },
+          `gatsby-remark-copy-linked-files`,
+          `gatsby-remark-smartypants`,
+          `gatsby-remark-autolink-headers`,
+          `gatsby-remark-emoji`,
         ],
       },
     },
-    'gatsby-transformer-sharp',
-    'gatsby-plugin-sharp',
     {
-      resolve: 'gatsby-plugin-google-analytics',
-      options: { trackingId: 'UA-73379983-2' },
-    },
-    {
-      resolve: 'gatsby-plugin-google-fonts',
+      resolve: `gatsby-plugin-google-analytics`,
       options: {
-        fonts: ['roboto:400,400i,500,700'],
+        trackingId: metaConfig.ga,
+        head: true,
+        anonymize: true,
       },
     },
-    'gatsby-plugin-sitemap',
-    'gatsby-plugin-offline',
-    'gatsby-plugin-catch-links',
-    'gatsby-plugin-react-helmet',
     {
-      resolve: 'gatsby-plugin-sass',
+      resolve: `gatsby-plugin-manifest`,
       options: {
-        postCssPlugins: [
-          lost(),
-          pxtorem({
-            rootValue: 16,
-            unitPrecision: 5,
-            propList: [
-              'font',
-              'font-size',
-              'line-height',
-              'letter-spacing',
-              'margin',
-              'margin-top',
-              'margin-left',
-              'margin-bottom',
-              'margin-right',
-              'padding',
-              'padding-top',
-              'padding-left',
-              'padding-bottom',
-              'padding-right',
-              'border-radius',
-              'width',
-              'max-width',
-            ],
-            selectorBlackList: [],
-            replace: true,
-            mediaQuery: false,
-            minPixelValue: 0,
-          }),
-        ],
-        precision: 8,
+        name: metaConfig.title,
+        short_name: metaConfig.title,
+        start_url: `/`,
+        background_color: `#ffffff`,
+        theme_color: `#663399`,
+        display: `minimal-ui`,
+        icon: metaConfig.icon,
       },
     },
+    {
+      resolve: `gatsby-plugin-typography`,
+      options: {
+        pathToConfigModule: `src/utils/typography`,
+      },
+    },
+    `gatsby-transformer-sharp`,
+    `gatsby-plugin-sharp`,
+    `gatsby-plugin-feed`,
+    `gatsby-plugin-offline`,
+    `gatsby-plugin-react-helmet`,
+    `gatsby-plugin-sass`,
+    `gatsby-plugin-lodash`,
+    `gatsby-plugin-sitemap`,
   ],
 }
