@@ -30,13 +30,21 @@ draft: false
     ```
     실행한 모습
     ![spark-submit-test](./spark-submit-test.png)
++ Configuration 우선순위
+    1. code 내에서 정의한 설정
+    2. spark-submit 에서 넣어주는 설정
+    3. spark 폴더 내에 있는 설정파일에 적어둔 설정
 +  --master 옵션을 조정해줌으로써 YARN이나 Kubernetes와 같은 클러스터 매니져에서 해당 애플리케이션을 수행할 수도 있다.
-    사용가능한 값 목록
++  사용가능한 값 목록
     + local
     + local[N] (로컬모드에서 N개의 코어로 실행)
     + local[*] (로컬모드에서 현재 머신이 가지고 있는 만큼의 코어로 실행한다.)
     + yarn
     + k8s://<api_server_url>
++  --deploy-mode 옵션
+    + cluster 모드 : Driver 자체가 마스터에서 실행되고 마스터 내부에서 실행된다.
+    + client 모드 : Driver는 submit을 호출한 노드에서 실행된다.
++ [spark-submmit 공식 문서](https://spark.apache.org/docs/latest/submitting-applications.html)
 
 ## Dataset
 + Java나 Scala에서 사용하는 정적 데이터 타입을 지원하기 위한 API이다.
@@ -78,6 +86,8 @@ draft: false
 ## 구조적 스트리밍
 + 2.2버전 이상에서 사용 가능
 + 스트림 처리용 고수준 API
++ 일반 스트리밍
+    + 적은 지연시간
 
 ### 장점
 + 구조적 API로 개발된 배치 모드의 연산을 스트리밍 방식으로 실행 가능
@@ -87,3 +97,8 @@ draft: false
 + 정적 데이터셋의 데이터를 분석해 DataFrame을 생성한다. (Dataset의 스키마도 함께 생성)
 + 스트리밍 연산 역시 지연 연산이므로 스트리밍 액션을 호출해야한다.
     + 스트리밍 액션은 다른 정적 액션들과는 다른 특성을 가진다.(추가해야할 부분)
+
+## 저수준 API
++ 구조적 API와 다르게 세부적인 구현방식에서 차이가 보인다.
+    + 파이썬과 스칼라에서 생성한 두 개의 RDD가 동일하지는 않다.
++ (구조적 API를 사용하는 것을 권장한다)
