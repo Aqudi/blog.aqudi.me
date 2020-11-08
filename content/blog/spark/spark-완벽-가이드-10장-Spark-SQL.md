@@ -58,7 +58,7 @@ draft: false
    ```
 
 2. 프로그래밍 SQL 인터페이스
-   [Programming SQL interface 실습 노트북](https://colab.research.google.com/drive/1OmbiA6P0JVD4GDSDyWwcl9aOk8cDwtvw#scrollTo=RIt6nVeDCvCs&line=13&uniqifier=1)
+   [Programming SQL interface 실습 노트북](https://colab.research.google.com/drive/1OmbiA6P0JVD4GDSDyWwcl9aOk8cDwtvw?usp=sharing)
    ```scala
    spark.sql("SELECT 1+1").show()
    ```
@@ -160,14 +160,14 @@ draft: false
   ORIGIN_COUNTRY_NAME STRING COMMENT "여기가 코멘트",
   count LONG
   )
-  USING JSON
-  OPTIONS (path './2015-summary.json')
+  USING CSV
+  OPTIONS (path './2015-summary.csv')
   ```
 
 - SELECT 결과를 테이블로 생성할 수도 있다.
 
   ```sql
-  REATE TABLE flights_from_select
+  CREATE TABLE flights_from_select
   USING parquet AS SELECT * FROM flights
   ```
 
@@ -203,7 +203,9 @@ ROW FORMAT DELIMITED FIELDS TERMINAED BY ','
 LOCATION './data/flight-data-hive'
 ```
 
-- 외부 테이블의 데이터 삽입은 표준 SQL문법을 따른다.
+### 테이블 데이터 삽입하기
+
+- 테이블의 데이터 삽입은 표준 SQL문법을 따른다.
 - 특정 파티션에만 저장하고 싶은 경우 파티션 명세를 추가할 수 있다.
 
 ```sql
@@ -231,6 +233,7 @@ LIMIT 12
 
 ### 메타데이터 갱신하기
 
+- 테이블의 메타데이터를 유지해야 최신의 데이터셋을 읽고 있다는 것을 보장할 수 있다.
 - 테이블과 관련된 모든 캐싱된 항목을 갱신
   ```sql
   REFRESH table partitioned_flights
@@ -252,6 +255,19 @@ DROP TABLE flights_csv;
 DROP TABLE IF EXISTS flights_csv;
 ```
 
+### 테이블 캐싱하기
+
+- 테이블 캐싱
+
+  ```sql
+  CACHE TABLE flights
+  ```
+
+- 캐쉬된 테이블 제거
+  ```sql
+  UNCACHE TABLE flights
+  ```
+
 ## 뷰(View)
 
 - View는 사용자에게 Table처럼 보인다.
@@ -260,7 +276,7 @@ DROP TABLE IF EXISTS flights_csv;
 
   ```python
    flights = spark.read.format("json")\
-      .load("/content/gdrive/My Drive/Colab Notebooks/datas/2015-summary.json")
+      .load("./2015-summary.json")
 
    just_usa_df = flights.where("dest_country_name = 'United States'")
    print(just_usa_df.selectExpr("*").explain)
@@ -346,7 +362,7 @@ DROP VIEW IF EXISTS just_usa_view;
 
 ### 구조체
 
-- 구조체는 맵에 더 까가운 복합 데이터 타입니다.
+- 구조체는 맵에 더 까가운 복합 데이터 타입이다.
 - 여러 컬럼이나 표현식을 괄호로 묶으면 생성된다.
 
 - 구조체 생성
