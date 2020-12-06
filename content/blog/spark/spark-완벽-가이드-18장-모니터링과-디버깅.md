@@ -28,7 +28,7 @@ draft: false
   - 이 중 일부 정보들은 스파크 UI에서도 확인이 가능하지만 저수준 디버깅이 필요할 때는 JVM 도구가 더 유용합니다.
   - JVM 도구 종류
     - jstack : 스택트레이스
-    - jamp : 힙 덤프 생성
+    - jmap : 힙 덤프 생성
     - jstat : 시계열 통계 리포트 제공
     - jconsole : JVM 속성 변수들을 시각화
     - jvisualvm : 스파크 잡의 특성을 알아보는데 도움이 되는 도구
@@ -41,7 +41,7 @@ draft: false
     - iotop
 - 클러스터
   - 스파크 애플리케이션이 실행되는 클러스터
-  - 클러스터 매니저 정류
+  - 클러스터 매니저 종류
     - YARN
     - Mesos
     - Spark standalone
