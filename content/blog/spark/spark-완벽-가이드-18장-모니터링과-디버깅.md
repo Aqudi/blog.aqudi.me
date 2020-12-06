@@ -112,11 +112,12 @@ draft: false
 ### 스파크 UI 히스토리 서버
 
 - 이벤트 로그를 저장하도록 설정하면 이전 기록들도 로그를 기반으로 확인할 수 있습니다.
-- 마찬가지로 웹으로 확인이 가능하며 18080포트를 기본으로 사용합니다.
-- http://localhost:18080
+- 마찬가지로 웹으로 확인이 가능하며 18080포트를 기본으로 사용합니다.  
+  http://localhost:18080
+- `spark-defaults.conf`에 정의된 `spark.eventLog.enabled` 속성을 `true`로 설정하시면 `spark.evenLog.dir`에 정의된 폴더로 이벤트 로그가 저장됩니다. (제 경우에는 설정 파일이 `/usr/spark/conf`에 저장되어 있었습니다.)
 - 아래 링크에 히스토리 서버 관련된 더 자세한 정보와 적용할 수 있는 설정들에 대해서 알아볼 수 있으므로 확인해보시길 바랍니다.  
   [히스토리 서버 문서](https://spark.apache.org/docs/latest/monitoring.html)
-- 만약 아래와 같은 에러가 뜬다면 `/tmp/spark-events` 폴더를 만들어주시면 됩니다.
+- 만약 아래와 같은 에러가 뜬다면 `/tmp/spark-events` 폴더를 만들어주시면 됩니다.  
   ![error](./18장/spark-history-server-error.png)
 
 ## 디버깅 및 스파크 응급처치
