@@ -71,7 +71,7 @@ draft: false
 
   - Thrift 서버 실행
 
-    ```shelll
+    ```shell
     $SPARK_HOME/sbin/start-thriftserver.sh
 
     # 환경변수를 통해 Thrift 서버의 주소를 변경할 수 있다.
