@@ -78,10 +78,9 @@
   },
   "scripts": {
     "post": "gatsby-post-gen",
-    "dev": "gatsby develop",
+    "develop": "gatsby develop -H 0.0.0.0 -p 8888",
     "lint": "eslint --ext .js,.jsx --ignore-pattern public .",
     "format": "prettier --trailing-comma es5 --no-semi --single-quote --write 'src/**/*.js' 'src/**/*.md'",
-    "develop": "gatsby develop",
     "start": "npm run develop",
     "build": "gatsby build",
     "lh": "lighthousebot",
