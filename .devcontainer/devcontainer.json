@@ -22,7 +22,10 @@
 	"settings": {},
 	// Add the IDs of extensions you want installed when the container is created.
 	"extensions": [
-		"rebornix.Ruby"
+		"rebornix.Ruby",
+		"redhat.vscode-yaml",
+		"yzhang.markdown-all-in-one",
+		"bierner.markdown-preview-github-styles",
 	],
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	"forwardPorts": [
