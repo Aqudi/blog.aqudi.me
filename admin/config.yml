@@ -1,0 +1,23 @@
+backend:
+  name: git-gateway
+  branch: master
+  commit_messages:
+    create: "post: Create {{slug}}"
+    update: "post: Update {{slug}}"
+    delete: "post: Delete {{slug}}"
+    uploadMedia: "post: Upload media at {{path}}"
+    deleteMedia: "post: Delete media at {{path}}"
+media_folder: "assets/uploads"
+collections:
+  - name: "blog"
+    label: "Blog"
+    folder: "_posts/"
+    create: true
+    fields:
+      - { label: "Layout", name: "layout", widget: "hidden", default: "blog" }
+      - { label: "Title", name: "title", widget: "string" }
+      - { label: "Categories", name: "categories", widget: "list" }
+      - { label: "Tags", name: "tags", widget: "list" }
+      - { label: "Publish Date", name: "date", widget: "datetime" }
+      - { label: "Body", name: "body", widget: "markdown" }
+local_backend: true
