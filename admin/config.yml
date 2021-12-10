@@ -8,6 +8,7 @@ backend:
     uploadMedia: "post: Upload media at {{path}}"
     deleteMedia: "post: Delete media at {{path}}"
 media_folder: "assets/uploads"
+publish_mode: editorial_workflow
 collections:
   - name: "blog"
     label: "Blog"
@@ -20,4 +21,3 @@ collections:
       - { label: "Tags", name: "tags", widget: "list" }
       - { label: "Publish Date", name: "date", widget: "datetime" }
       - { label: "Body", name: "body", widget: "markdown" }
-local_backend: true
