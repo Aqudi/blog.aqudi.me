@@ -25,7 +25,7 @@ tagline: 기록용 블로그 # it will display as the sub-title
 description: >- # used by seo meta and the atom feed
   컴퓨터과학과 대학원생 허태정입니다.
 
-url: "https://aqudi.me"
+url: "https://blog.aqudi.me"
 
 github:
   username: Aqudi # change to your github username
