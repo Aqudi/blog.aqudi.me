@@ -19,4 +19,8 @@ date: 2022-07-13T04:22:07.141Z
 
 ## Dockerized apt-cacher-ng
 
+Docker의 공식 문서에도 apt-cacher-ng를 dockerized 하는 내용이 있다.
+
 https://docs.docker.com/samples/apt-cacher-ng/
+
+실제 Dockerfile은 위 샘플을 따라하면 쉽게 만들 수 있지만 더 쉽게 빌드하는 방법 등을 정리하고자 한다. 먼저 Dockerfile은 샘플에서 ARG를 2개 추가하여 
