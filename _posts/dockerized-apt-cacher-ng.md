@@ -19,8 +19,48 @@ date: 2022-07-13T04:22:07.141Z
 
 ## Dockerized apt-cacher-ng
 
-Docker의 공식 문서에도 apt-cacher-ng를 dockerized 하는 내용이 있다.
+Docker의 공식 문서에도 apt-cacher-ng를 dockerized 하는 내용이 있어 Dockerfile은 아래와 같이 문서에 있는 것을 사용했다.
 
 https://docs.docker.com/samples/apt-cacher-ng/
 
-실제 Dockerfile은 위 샘플을 따라하면 쉽게 만들 수 있지만 더 쉽게 빌드하는 방법 등을 정리하고자 한다. 먼저 Dockerfile은 샘플에서 ARG를 2개 추가하여 
+```dockerfile
+# syntax=docker/dockerfile:1
+FROM ubuntu
+
+VOLUME ["/var/cache/apt-cacher-ng"]
+RUN apt-get update && apt-get install -y apt-cacher-ng
+
+EXPOSE 3142
+CMD chmod 777 /var/cache/apt-cacher-ng && /etc/init.d/apt-cacher-ng start && tail -f /var/log/apt-cacher-ng/*
+```
+
+그리고 apt-cacher-ng를 활용하기 위해서 간단하게 anaconda를 설치하는 시나리오를 준비해봤다. 다음과 같이 `APT_CACHER_NG_HOST`와 `APT_CACHER_NG_PORT`라는 두 개의 인자를 받아 빌드하는 이미지이다.
+
+```dockerfile
+FROM ubuntu:20.04
+
+ARG APT_CACHER_NG_HOST
+ARG APT_CACHER_NG_PORT
+
+# Config apt-cacher-ng proxy
+RUN echo "Acquire::http { Proxy \"http://$APT_CACHER_NG_HOST:$APT_CACHER_NG_PORT\"; };" >> /etc/apt/apt.conf.d/01proxy
+
+# Install apt packages
+RUN apt-get -y update && \ 
+    apt-get -y install curl libgl1-mesa-glx libegl1-mesa libxrandr2 libxrandr2 \
+    libxss1 libxcursor1 libxcomposite1 libasound2 libxi6 libxtst6 && \ 
+    apt-get -y autoremove  && \ 
+    apt-get -y clean && \ 
+    rm -rf /var/lib/apt/lists/* && \ 
+    rm -rf /tmp/*
+
+# Install Anaconda3
+RUN curl https://repo.anaconda.com/archive/Anaconda3-2022.05-Linux-x86_64.sh --output ~/anaconda.sh && \
+    bash ~/anaconda.sh -b -p $HOME/anaconda3 && \
+    echo 'export PATH=$HOME/anaconda3/bin:$PATH' >> ~/.bashrc && \
+    $HOME/anaconda3/bin/conda init bash
+```
+
+## apt package를 추가했을 때 속도 비교
+
+위의 Dockerfile을 그대로 빌드를 했을 때 걸리는 시간과 tmux를 추가로 설치했을 때 걸리는 시간을 비교해볼 것이다.
