@@ -1,0 +1,9 @@
+{
+  "readableLineLength": false,
+  "alwaysUpdateLinks": true,
+  "attachmentFolderPath": "assets/img/posts",
+  "useMarkdownLinks": true,
+  "newFileLocation": "folder",
+  "newFileFolderPath": "_posts",
+  "trashOption": "local"
+}
