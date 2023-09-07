@@ -25,7 +25,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "_drafts/2023-08-20-boj2231.md",
+                "file": "_posts/2023-08-20-boj-2231.md",
                 "mode": "source",
                 "source": false
               }
@@ -43,7 +43,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "_drafts/2023-08-20-boj2231.md",
+                "file": "_posts/2023-08-20-boj-2231.md",
                 "mode": "source",
                 "source": false
               }
@@ -115,7 +115,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "_posts/2021-08-18-boj-2447.md",
+                "file": "_posts/2023-08-20-boj-2231.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -132,7 +132,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "_posts/2021-08-18-boj-2447.md",
+                "file": "_posts/2023-08-20-boj-2231.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -155,7 +155,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "_posts/2021-08-18-boj-2447.md"
+                "file": "_posts/2023-08-20-boj-2231.md"
               }
             }
           }
@@ -178,20 +178,20 @@
       "omnisearch:Omnisearch": false
     }
   },
-  "active": "960dcf5af47626e2",
+  "active": "a2d369e72f2a6821",
   "lastOpenFiles": [
-    "_drafts/2023-08-20-boj2231.md",
     "_posts/2021-08-18-boj-2447.md",
-    "_site/tags/study/index.html",
-    "_site/tags/study",
-    "_site/tags/book/index.html",
-    "_site/tags/book",
+    "_posts/2023-08-20-boj-2231.md",
     "_posts/2020-09-02-shell-loop.md",
     "_posts/2020-09-16-wsl-jupyter-notebook-with-browser-in-windows.md",
     "_posts/2020-10-11-sparkcomplete-guide-3.md",
     "_posts/2020-11-08-spark-complete-guide-10.md",
     "_posts/2020-12-06-spark-complete-guide-18.md",
     "_posts/2020-12-19-spark-complete-guide-22.md",
+    "_site/tags/study/index.html",
+    "_site/tags/study",
+    "_site/tags/book/index.html",
+    "_site/tags/book",
     "_site/posts/shell-loop/index.html",
     "_site/posts/shell-loop",
     "README.md",
