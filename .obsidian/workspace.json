@@ -13,7 +13,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "_posts/2021-08-18-boj-2447.md",
+                "file": "_posts/2023-08-20-boj-2231.md",
                 "mode": "source",
                 "source": false
               }
@@ -21,24 +21,6 @@
           },
           {
             "id": "daf5962dcd27096c",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "_posts/2023-08-20-boj-2231.md",
-                "mode": "source",
-                "source": false
-              }
-            }
-          }
-        ]
-      },
-      {
-        "id": "41953f83d30736bc",
-        "type": "tabs",
-        "children": [
-          {
-            "id": "a2d369e72f2a6821",
             "type": "leaf",
             "state": {
               "type": "markdown",
@@ -178,16 +160,17 @@
       "omnisearch:Omnisearch": false
     }
   },
-  "active": "a2d369e72f2a6821",
+  "active": "960dcf5af47626e2",
   "lastOpenFiles": [
     "_posts/2021-08-18-boj-2447.md",
     "_posts/2023-08-20-boj-2231.md",
+    "_posts/2023-08-21-boj-4949.md",
+    "_posts/2020-12-19-spark-complete-guide-22.md",
     "_posts/2020-09-02-shell-loop.md",
     "_posts/2020-09-16-wsl-jupyter-notebook-with-browser-in-windows.md",
     "_posts/2020-10-11-sparkcomplete-guide-3.md",
     "_posts/2020-11-08-spark-complete-guide-10.md",
     "_posts/2020-12-06-spark-complete-guide-18.md",
-    "_posts/2020-12-19-spark-complete-guide-22.md",
     "_site/tags/study/index.html",
     "_site/tags/study",
     "_site/tags/book/index.html",
