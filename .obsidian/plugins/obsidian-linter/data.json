@@ -42,11 +42,11 @@
     "yaml-timestamp": {
       "enabled": true,
       "date-created": true,
-      "date-created-key": "date created",
+      "date-created-key": "date",
       "force-retention-of-create-value": true,
       "date-modified": true,
-      "date-modified-key": "date",
-      "format": "YYYY-MM-DD HH:mm:ss"
+      "date-modified-key": "last_modified_at",
+      "format": "YYYY-MM-DD HH:mm:ssZZ"
     },
     "yaml-title": {
       "enabled": false,
@@ -71,7 +71,7 @@
     },
     "header-increment": {
       "enabled": false,
-      "start-at-h2": false
+      "start-at-h2": true
     },
     "headings-start-line": {
       "enabled": false
