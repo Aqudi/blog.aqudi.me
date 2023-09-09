@@ -2,13 +2,9 @@
 aliases: []
 title: Spark 완벽 가이드 3장
 author: Aqudi
-last_modified_at: 2023-09-07 23:35:15+0900
-categories:
-  - spark
-tags:
-  - Spark
-  - Book
-  - Study
+last_modified_at: 2023-09-09 15:32:07+0900
+categories: [spark]
+tags: [Spark, Book, Study]
 date: 2020-10-11 15:10:00+0900
 ---
 ## 스파크의 기본 요소
