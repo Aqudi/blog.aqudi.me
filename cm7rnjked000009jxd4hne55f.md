@@ -8,72 +8,84 @@ tags: cloudflare, homeserver
 
 ---
 
-## 들어가며
+홈서버를 운영할 때 외부에서 접근할 방법을 고민하면 **포트포워딩**이 가장 먼저 떠오릅니다. 공유기에서 특정 포트를 열어 외부에서 서버에 접속할 수 있도록 설정하는 방식으로, 많은 홈서버 운영자가 처음 시도하는 방법입니다.
 
-홈서버를 운영할 때 외부에서 접근할 방법을 고민하면 **포트포워딩**이 가장 먼저 떠오른다. 공유기에서 특정 포트를 열어 외부에서 서버에 접속할 수 있도록 설정하는 방식으로, 많은 홈서버 운영자가 처음 시도하는 방법이다. 하지만 포트포워딩에는 몇 가지 문제점이 있다.
+하지만 포트포워딩을 하고 접속 테스트를 하려고 공유기 설정을 들어가봤는데, CGNAT 환경이어서 외부 IP가 `192.168.x.x` 형태로 되어 있더라고요. 포트포워딩을 설정해도 외부에서 접속 자체가 안 되는 상황이었습니다.
 
-### **포트포워딩의 주요 문제점**
 
-1. **공유기의 NAT 문제** - 공유기는 사설 IP 주소를 공인 IP 주소로 변환하여 여러 기기가 인터넷에 접속할 수 있도록 한다. 이 과정에서 올바른 포트포워딩 설정이 이루어지지 않거나 공유기의 제한이 있을 경우, 외부에서 서버에 접근이 어려울 수 있다.
-    
-2. **ISP의 공인 IP 제한 (CGNAT 문제)** - 많은 인터넷 서비스 제공업체(ISP)는 가정용 인터넷 사용자에게 개별 공인 IP를 제공하지 않고, \*\*[캐리어급 NAT(Carrier-Grade NAT, CGNAT)](https://en.wikipedia.org/wiki/Carrier-grade_NAT)\*\*를 적용하여 여러 사용자가 하나의 공인 IP를 공유한다. 이 경우, 포트포워딩을 설정하더라도 ISP에서 추가적인 NAT 계층이 존재하기 때문에 외부에서 서버에 직접 접근하는 것이 불가능하다.
-    
-3. **보안 이슈** - 실제 IP를 노출해야 하므로 해킹 시도나 DDoS 공격에 노출될 위험이 높아진다.
-    
+## 포트포워딩의 주요 문제점
 
-Cloudflare Tunnel은 2번 문제를 어떻게 해결할지 조사하던 중 알게 됐다. 자취방의 인터넷이 CGNAT 환경이었기 때문에 공유기의 외부 IP가 `192.168.x.x` 형식의 사설 IP였고, 포트포워딩을 설정해도 외부에서 접근할 수 없었다.
+### 1. 공유기의 NAT 문제
+공유기는 사설 IP 주소를 공인 IP 주소로 변환하여 여러 기기가 인터넷에 접속할 수 있도록 합니다. 이 과정에서 올바른 포트포워딩 설정이 이루어지지 않거나 공유기의 제한이 있을 경우, 외부에서 서버에 접근이 어려울 수 있습니다.
 
-이번 글에서는 **퍼블릭 IP가 없는 상황에서** Cloudflare Tunnel을 사용하여 **포트포워딩 없이** 홈서버를 외부에서 접근 가능하게 설정하는 방법에 대해서 알아보겠다.
+### 2. ISP의 공인 IP 제한 (CGNAT 문제)
+많은 인터넷 서비스 제공업체(ISP)는 가정용 인터넷 사용자에게 개별 공인 IP를 제공하지 않고, **캐리어급 NAT(Carrier-Grade NAT, CGNAT)** 을 적용하여 여러 사용자가 하나의 공인 IP를 공유합니다.
 
-## **Cloudflare Tunnel이란?**
+CGNAT는 ISP가 IPv4 주소 부족 문제를 해결하기 위해 사용하는 기술로, 하나의 공인 IP를 수십~수백 명이 공유하는 구조입니다. 문제는 이중 NAT 구조입니다:
 
-Cloudflare Tunnel은 **서버의 실제 IP 주소를 노출하지 않고도 외부에서 안전하게 접근할 수 있도록** 도와주는 서비스다. Tunnel을 사용하면 외부 IP로 트래픽을 보내지 않고 [데몬(cloudflared)](https://github.com/cloudflare/cloudflared)이 아웃바운드 전용 연결을 만들어서 외부로 트래픽을 전달해준다.
+```
+외부 → ISP의 CGNAT → 당신의 공유기 → 홈서버
+```
 
-HTTP, HTTPS, SSH 등 우리가 홈서버 운영하면서 주로 필요한 프로토콜 모두 지원하고, 한 번 설정한 이후로는 일반적으로 우리가 서버에 접속하는 것과 동일하게 사용할 수 있다.
+포트포워딩을 설정하더라도 ISP 레벨에서 추가적인 NAT 계층이 존재하기 때문에 외부에서 서버에 직접 접근하는 것이 불가능합니다. 외부에서 들어오는 연결이 어느 사용자에게 보내야 할지 ISP가 알 수 없기 때문이죠.
 
-[https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/](https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/)
+**CGNAT 환경 확인 방법:**
+- 공유기 WAN IP와 "내 IP 확인" 사이트의 IP가 다르면 CGNAT
+- 특히 WAN IP가 `100.64.x.x` ~ `100.127.x.x` 형태면 거의 확정
 
-[![HTTP 요청이 Cloudflare 터널과 연결된 애플리케이션에 도달하는 방법](https://developers.cloudflare.com/_astro/handshake.eh3a-Ml1_1IcAgC.webp align="left")](https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/)
+실제로 제 경우, 자취방의 인터넷이 CGNAT 환경이었기 때문에 공유기의 외부 IP가 `192.168.x.x` 형식의 사설 IP였고, 포트포워딩을 설정해도 외부에서 접근할 수 없었습니다.
 
-## 포트 포워딩 vs Cloudflare Tunnel
+### 3. 보안 이슈
+실제 IP를 노출해야 하므로 해킹 시도나 DDoS 공격에 노출될 위험이 높아집니다.
 
-### **포트 포워딩 방식**
+이러한 문제를 해결하기 위해 **Cloudflare Tunnel**을 활용하면 **포트포워딩 없이도 안전하게 홈서버를 운영할 수 있습니다.** 이번 글에서는 Cloudflare Tunnel을 사용하여 홈서버를 외부에서 접근 가능하게 설정하는 방법과, 사용할 때 고려해야 할 점들을 다룹니다.
 
-* 일반적으로 외부에서 서버에 접속하려면 **공개 IP 주소(public ip)**가 필요하다.
-    
-* 서버가 연결된 네트워크가 **CGNAT 등으로 공개 IP 주소가 없는 경우** 사용이 불가능하다.
-    
-* 포트 포워딩을 설정하면, **공개된 IP를 통해 직접 연결**되므로 해커나 봇이 공격할 위험이 있다.
-    
+## Cloudflare Tunnel이란?
 
-### **Cloudflare Tunnel 방식**
+Cloudflare Tunnel(구 Argo Tunnel)은 Cloudflare가 제공하는 서비스로, **서버의 IP를 공개하지 않고도 외부에서 접속할 수 있도록 하는 기술**이다. 기존 포트포워딩 방식과 가장 큰 차이점은 **공유기에서 포트를 열 필요가 없다는 점**이다.
 
-* 서버가 직접 인터넷에 노출되지 않는다. 👉 **공개 IP 주소가 필요없다.**
-    
-* 서버 내부에서 **Cloudflare의 네트워크로 아웃바운드 전용 연결**을 생성한다.
-    
-* 트래픽이 Cloudflare를 통해서만 전달되므로 **보안이 강화**된다.
-    
+### 기존 포트포워딩 방식
 
-#### **추가적인 보안 기능 활용 가능**
+```
+외부 클라이언트 → 공유기 포트포워딩 → 홈서버
+```
 
-* **TLS 암호화:** Cloudflare 자체에서 SSL/TLS 인증서를 지원한다.
-    
-* **DDoS 방어:** Cloudflare의 글로벌 네트워크를 통해 DDoS 공격으로부터 서버를 보호한다.
-    
-* **웹 애플리케이션 방화벽(WAF)**: 악의적인 트래픽을 필터링하여 애플리케이션을 보호한다.
-    
+✅ 서버가 직접 외부에서 접근 가능  
+❌ 포트가 노출되므로 해킹 위험 존재
 
-#### **참고 자료 및 추가 읽을거리**
+### Cloudflare Tunnel 방식
 
-Cloudflare Tunnel에 대해 더 자세히 알고 싶다면 다음 자료를 참고하시기 바랍니다:
+```
+홈서버 → Cloudflare Tunnel → Cloudflare → 외부 클라이언트
+```
 
-* [**Cloudflare Tunnel 공식 문서**](https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/): Cloudflare Tunnel의 작동 원리와 설정 방법을 자세히 설명한다.
-    
-* [**Cloudflare Zero Trust를 이용한 Kubectl**](https://blog.cloudflare.com/ko-kr/kubectl-with-zero-trust/): Cloudflare Zero Trust를 활용하여 쿠버네티스 API에 안전하게 접근하는 방법을 설명한다.
-    
+✅ 서버의 IP가 노출되지 않음  
+✅ 포트포워딩 필요 없음 → ISP NAT 문제 해결  
+✅ Cloudflare의 보안 기능 활용 가능
 
-## **Cloudflare Tunnel 설정 방법 (MacOS 기준)**
+즉, **홈서버는 Cloudflare에만 연결하고, Cloudflare가 외부 요청을 중계하는 방식**이므로 보안이 강화된다. 심지어 Cloudflare는 대부분의 경우 무료로 사용할 수 있으며, WAF(Web Application Firewall), Anycast 네트워크, DDoS 방어 시스템을 활용하여 악의적인 트래픽을 차단하고, 서버가 직접적인 공격을 받지 않도록 보호하는 기능까지 제공해준다.
+
+위와 같은 이유로 이번에 홈서버 운영할 때 직접 포트포워딩해서 사용하는 게 아니라 Cloudflare Tunnel을 사용해서 운영하기로 했습니다.
+
+## CGNAT 우회 방법 비교
+
+Cloudflare Tunnel 외에도 CGNAT를 우회하는 여러 방법이 있습니다:
+
+| 방법 | 장점 | 단점 | 비용 |
+|------|------|------|------|
+| **ISP에 공인 IP 요청** | 근본적 해결 | 거부당할 수 있음 | 무료~추가 비용 |
+| **VPS + VPN (WireGuard)** | 완전한 제어 | 설정 복잡, 관리 부담 | $2~10/월 |
+| **Ngrok** | 빠른 설정 | 무료 플랜 제한 많음 | $8~25/월 |
+| **Tailscale** | P2P 메쉬 네트워크 | 공개 웹 서비스엔 부적합 | 무료 (개인용) |
+| **Cloudflare Tunnel** | 무료, 보안 강화, 간단 | 속도 저하 가능성 | 무료 |
+
+Cloudflare Tunnel은 홈서버를 공개 웹으로 쉽게 노출하고 싶을 때 가장 간단한 선택입니다. 특히:
+- **완전 무료**: VPS는 월 $2~10, Ngrok은 월 $8~25
+- **보안 자동화**: TLS 인증서, DDoS 방어, WAF 기본 제공
+- **아웃바운드 전용**: 포트 개방 불필요
+- **글로벌 CDN**: 전 세계 어디서든 빠른 접속 
+
+## Cloudflare Tunnel 설정 방법 (MacOS 기준)
 
 ### 사전 준비
 
